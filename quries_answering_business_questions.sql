@@ -1,23 +1,4 @@
-SELECT top 3 [order_id]
-      ,[user_key]
-      ,[seller_key]
-      ,[payment_key]
-      ,[order_date_key]
-      ,[order_time]
-      ,[order_approved_date_key]
-      ,[pickup_date_key]
-      ,[pickup_time]
-      ,[pickup_limit_date_key]
-      ,[pickup_limit_time]
-      ,[delivered_date_key]
-      ,[delivered_time]
-      ,[estimated_date_delivery_key]
-      ,[feedback_key]
-      ,[total_price]
-  FROM [dwh_DEM_DataModeling].[dbo].[Order_Fact]
-
-
-  --A) a.When is the peak season of our ecommerce ?
+--A) a.When is theÂ peak seasonÂ of our ecommerce ?
 Select top 1 count(f.order_id) , d.season
 From order_fact as f
 Inner join dateDim as d
@@ -25,7 +6,7 @@ on d.[DateKey] = f.[order_date_key]
 Group by d.season
 Order by count(f.order_id) desc
 
---b.What time users are most likely make an order or using the ecommerce app?
+--b.What time users are most likelyÂ make an order or using the ecommerce app?
 SELECT top 1 t.TimeOfDay,COUNT(f.order_id) AS OrdersCount
 FROM  order_fact f
 INNER JOIN timeDim t 
@@ -33,20 +14,20 @@ ON f.[order_time] = t.[TimeKey]
 GROUP BY  t.TimeOfDay
 ORDER BY OrdersCount DESC
 
---c.What is the preferred way to pay in the ecommerce?
+--c.What is theÂ preferredÂ way to pay in the ecommerce?
 Select top 1 Count(payment_type) ,payment_type
 From paymentDim
 Group by payment_type
 Order by Count(payment_type) desc
 
---d.How many installment is usually done when paying in the ecommerce?
+--d.How manyÂ installmentÂ is usually done when paying in the ecommerce?
 Select  Count(payment_installments) as count , payment_installments 
 From PaymentDim
 Group by payment_installments
 Order by Count(payment_installments) desc
 
---e.What is the average spending time for user for our ecommerce?
-	/*considered each order should multiplayed with factor >> this is a comparison between spending time between users ,
+--e.What is theÂ average spendingÂ time for userÂ for our ecommerce?
+	/*considered each order should multiplayed with factor >> this is a comparison between spendingÂ time between users ,
 	the more orders is a stronger indicator he spend more time on this ecommerce
 	*/
 select [user_key],count ([order_id]) as no_of_orders_per_day ,[order_date_key]
@@ -55,8 +36,8 @@ group by [order_date_key] ,[user_key]
 order by count ([order_id]) desc
 
 
---f.What is the frequency of purchase on each state?
-Select count(order_id) as [purchases on each state] ,[user_state]
+--f.What is theÂ frequency of purchaseÂ on each state?
+Select count(order_id) as [purchasesÂ on each state] ,[user_state]
 From [dbo].[Order_Fact] as o
 Inner join userdim as u
 On u.[user_key] =o.[user_key]
@@ -64,8 +45,8 @@ Group by ([user_state])
 Order by Count(order_id) desc
 
 
---g.Which logistic route that have heavy traffic in our ecommerce?
-/* WE considered heavy traffic  in days f delevary (if mch) , or in order_totals*/
+--g.WhichÂ logistic routeÂ that haveÂ heavy trafficÂ in our ecommerce?
+/* WE considered heavy trafficÂ  in days f delevary (if mch) , or in order_totals*/
 SELECT 
     sd.seller_city AS origin_city,
     ud.user_city AS destination_city,
@@ -113,7 +94,7 @@ ORDER BY
 */
 
 
---h.How many late delivered order in our ecommerce? Are late order affecting the customer satisfaction?
+--h.How manyÂ late delivered orderÂ in our ecommerce? AreÂ late order affecting the customer satisfaction?
 Select order_id ,del_d.[Date] as delivered_date ,est_d.[Date] as estimated_time_delivery , DATEDIFF(day ,est_d.[Date] 
 ,del_d.[Date] ) as Days_of_delay ,[feedback_score]
 FROM order_fact as o
@@ -131,7 +112,7 @@ order by Days_of_delay desc , [feedback_score]
 	where o.[delivered_date_key] > o.[estimated_date_delivery_key]
 /* here we calculate the diff of est_d and del_d for each order */
 
---i.How long are the delay for delivery / shipping process in each state?
+--i.How long are theÂ delay for delivery / shipping processÂ in each state?
 /*here we calculate the diff of est_d and del_d for each state (taking the avg of course)*/
  Select UD.user_state as state ,avg( DATEDIFF(day ,pic_d.[Date] 
 ,del_d.[Date] )) as shipping_process_time
@@ -146,7 +127,7 @@ where del_d.[Date] > pic_d.[Date]
 group by UD.user_state
 order by shipping_process_time desc
 
---j.How long are the difference between estimated delivery time and actual delivery time in each state?
+--j.How long are theÂ difference between estimated delivery time and actual delivery timeÂ in each state?
  Select UD.user_state as state ,avg( DATEDIFF(day ,est_d.[Date] 
 ,del_d.[Date] )) as avg_long_of_delay
 FROM order_fact as o
