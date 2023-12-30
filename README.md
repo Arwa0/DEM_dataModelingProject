@@ -100,7 +100,7 @@ There are no connections between the dimension tables themselves, they only conn
 
 This structure forms a star shape with the fact table at the center and dimension tables radiating out from it.
 
-## Staging :
+## Staging Area:
 We have Loaded the data from Excel sheets to a  temporary database so that we can clean it and prepare it
 Data warehouse construction by SQL Server:
 
