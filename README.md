@@ -54,14 +54,15 @@ Data
 
 Dimension tables (UserDim, PaymentDim, Seller, Feedback) use   surrogate keys.
 A surrogate key is:
-    An automatically generated unique identifier for each row
+
+An automatically generated unique identifier for each row
     It has no intrinsic meaning - just provides a unique id
     Usually an integer (identity) column
     For example:
    -UserDim - user_key int identity(1,1)
    -PaymentDim - payment_key int identity(1,1)
    
-   ·This allows adding/updating rows flexibly without constraints from a natural key.
+·This allows adding/updating rows flexibly without constraints from a natural key.
 
 
    
@@ -85,7 +86,7 @@ It is calculated as YEAR(@Date) * 10000 + MONTH(@Date) * 100 + DAY(@Date)
 This makes it a composite natural key We have used a composite natural key for DateDim
 
 ### Choose a proper data warehouse model : (Star Schema)
-![Untitled](![Untitled](https://github.com/Arwa0/DEM_dataModelingProject/assets/74055031/605b2b3f-7d94-492b-a138-1bd0ce14cc32)
+(![Untitled](https://github.com/Arwa0/DEM_dataModelingProject/assets/74055031/605b2b3f-7d94-492b-a138-1bd0ce14cc32)
 
 
 *Why did we use a star schema?*
